@@ -14,7 +14,7 @@ def square(x):
             X[i] = -1.0
     return X
 
-def generateDataset():
+def generateDataset(noise = 0):
     N = math.ceil(2 * math.pi / 0.1)
     pts = np.linspace(0, 2*np.pi, num = N)
     train1 = np.sin(pts)
@@ -28,19 +28,22 @@ def generateDataset():
 
 Xtrain, Xtest, train1, train2, test1, test2 = generateDataset()
 
-"""network1 = RBF.RBF_ite([0, 1, 10, 20, 40, 0.5, 100], 5, 0.1, 700)
+network1 = RBF.RBF_ite([0, 1, 10, 20, 40, 0.5, 100, -80, -2, -25, 65], 10, 0.3, 2000)
 eHisto = network1.fit(Xtrain, train1)
 Y = network1.predict(Xtest)
+print(eHisto[-1])
+
+print(np.mean(abs(Y-test1)))
 
 plt.plot(Xtest, Y)
 plt.plot(Xtest, test1)
 plt.show()
 
 plt.plot(eHisto)
-plt.show()"""
+plt.show()
 
 
-network2 = RBF.RBF_ite([0, 1, 10, 100, 1000, 10000, 100000], 1, 0.1, 700)
+"""network2 = RBF.RBF_ite([0, 1, 10, 100, 1000, 10000, 100000], 1, 0.1, 700)
 eHisto = network2.fit(Xtrain, train2)
 Y = network2.predict(Xtest)
 
@@ -49,4 +52,4 @@ plt.plot(Xtest, test2)
 plt.show()
 
 plt.plot(eHisto)
-plt.show()
+plt.show()"""
