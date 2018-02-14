@@ -1,31 +1,50 @@
-# -*- coding: utf-8 -*-
-
 import numpy as np
-import copy
 
-class simpleRBF():
-#   Implements a RBF with 1 input and 1 output
 
-    def __init__(self, lr=0.001, nb_eboch=20, batch_size=-1, nb_hidden=1):
-        self.batch_size = batch_size
-        self.lr = lr
-        self.nb_eboch = nb_eboch
-        self.nb_hidden = nb_hidden
-        self.W = []
-        self.mu = []
-        self.delta = []
-
-    def errorGivenPrediction(self, K, T):
-        return sum(pow(K-T,2))
-
-    def error(self, X, T):
-        return sum(pow(predict(X)-T,2))
-
-    def phi(self,X):
-        return exp((-pow(X-self.mu,2))/(2*pow(self.delta,2)))
+class RBF_ite:
+    def __init__(self, means, variance, learningRate, epochNb):
+        self.nodeNumber = len(means)
+        self.means = means
+        self.variances = [variance] * self.nodeNumber
+        self.learningRate = learningRate
+        self.weights = np.random.normal(0, 0.1, self.nodeNumber + 1).T
+        self.epochNb = epochNb
 
     def fit(self, X, T):
-        print("Not implemented yet")
+        eHisto = []
+        for epoch in range(self.epochNb):
+            p = np.random.permutation(len(X))
+            X, T = X[p], T[p]
+            PHI = self.phi(X)
+            f = np.dot(PHI, self.weights)
+
+            for i in range(len(X)):
+                f = np.dot(PHI, self.weights)
+                e = (T[i] - f[i])
+                deltaW = self.learningRate * e * PHI[i, :]
+                self.weights += deltaW
+
+            PHI = self.phi(X)
+            f = np.dot(PHI, self.weights)
+            e = sum(np.power(T - f, 2))
+            eHisto.append(e)
+        return eHisto
+
 
     def predict(self, X):
-        return sum(self.W * phi(X))
+        PHI = self.phi(X)
+        f = np.dot(PHI, self.weights)
+        return f
+
+    def phi(self, X):
+        PHI = np.ones((len(X), self.nodeNumber + 1))
+        for i in range(len(X)):
+            for j in range(self.nodeNumber + 1):
+                if j == 0:
+                    PHI[i][j] = 1
+                else:
+                    PHI[i][j] = self.RBF_function(X[i], self.means[j-1], self.variances[j-1])
+        return PHI
+
+    def RBF_function(self, xi, mu, var):
+        return np.exp( - (xi - mu) ** 2 / (2 * var))
