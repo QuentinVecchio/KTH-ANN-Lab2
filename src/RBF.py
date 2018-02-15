@@ -7,27 +7,28 @@ class RBF_ite:
         self.means = means
         self.variances = [variance] * self.nodeNumber
         self.learningRate = learningRate
-        self.weights = np.random.normal(0, 0.1, self.nodeNumber + 1).T
+        self.weights = np.random.normal(0, 1, self.nodeNumber + 1).T
         self.epochNb = epochNb
 
-    def fit(self, X, T):
+    def fit(self, X, f):
         eHisto = []
+        print("Begin training")
         for epoch in range(self.epochNb):
             p = np.random.permutation(len(X))
-            X, T = X[p], T[p]
+            X, f = X[p], f[p]
             PHI = self.phi(X)
-            f = np.dot(PHI, self.weights)
 
             for i in range(len(X)):
-                f = np.dot(PHI, self.weights)
-                e = (T[i] - f[i])
+                prod = np.dot(PHI, self.weights)
+                e = (f[i] - prod[i])
                 deltaW = self.learningRate * e * PHI[i, :]
                 self.weights += deltaW
 
             PHI = self.phi(X)
-            f = np.dot(PHI, self.weights)
-            e = sum(np.power(T - f, 2))
+            prod = np.dot(PHI, self.weights)
+            e = sum(np.power(f - prod, 2))
             eHisto.append(e)
+        print("Final error on the train set: " + str(eHisto[-1]))
         return eHisto
 
 
