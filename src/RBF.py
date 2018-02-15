@@ -6,8 +6,7 @@ import numpy as np
 
 class simpleRBF():
 #   Implements a RBF with 1 input and 1 output
-
-    def __init__(self, lr=0.001, nb_eboch=20, batch_size=-1, nb_hidden=5):
+    def __init__(self, lr=0.001, nb_eboch=1, batch_size=50, nb_hidden=5):
         self.batch_size = batch_size
         self.lr = lr
         self.nb_eboch = nb_eboch
@@ -58,18 +57,29 @@ class simpleRBF():
                 print("Step : " + str(step))
                 print("Current error : " + str(self.error(X,T)))
 
-            for i,Xk in enumerate(X):
-                phiXk = PHI[i]
-                phiXk2 = phiXk.reshape((1,len(phiXk)))
-                e = (T[i] - np.dot(phiXk, self.W))
-                deltaW = self.lr * e * phiXk.T
-                deltaW = np.reshape(deltaW, (self.nb_hidden+1,1))
+            batchIndex_list =[]
+            if(self.batch_size == -1):
+                batchIndex_list.append([0,len(X)])
+            else:
+                for i in range(int((len(X) * 1.0) / self.batch_size)):
+                    batchIndex_list.append([i * self.batch_size, (i + 1) * self.batch_size])
+
+            for batchIndex in batchIndex_list:
+                start, end = batchIndex
+                batchX = X[start:end] #(end-start + 1) x 1
+                phiXk = PHI[start:end]# (end-start + 1) x n
+
+                e = (T[start:end] - np.dot(phiXk, self.W))
+                #print("error shape : " + str(e.shape))
+                deltaW = self.lr  * np.dot(phiXk.T,e)
+
+                deltaW = np.reshape(deltaW, (self.nb_hidden + 1,1))
                 #print(deltaW.shape)
                 self.W += deltaW
 
-            if abs(self.error(X,T)) < bestError:
-                bestError = abs(self.error(X,T))
-                bestW = self.W[:]
+                if abs(self.error(X,T)) < bestError:
+                    bestError = abs(self.error(X,T))
+                    bestW = self.W[:]
             errorHistory.append(self.error(X,T))
 
         self.W = bestW
