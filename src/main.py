@@ -28,7 +28,7 @@ def generateDataset(noise = 0):
 
 Xtrain, Xtest, train1, train2, test1, test2 = generateDataset()
 
-network1 = RBF.RBF_ite([0, 1, 10, 20, 40, 0.5, 100, -80, -2, -25, 65], 10, 0.3, 2000)
+network1 = RBF.RBF_ite([0, 1/2 * np.pi, np.pi, 3/2 * np.pi, 2*np.pi], np.pi, 0.3, 2000)
 eHisto = network1.fit(Xtrain, train1)
 Y = network1.predict(Xtest)
 print(eHisto[-1])
