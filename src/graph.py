@@ -1,20 +1,20 @@
 from __future__ import division
-import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 import numpy as np
+import matplotlib.patches as mpatches
 
-from matplotlib import cm
-from mpl_toolkits.mplot3d import Axes3D
-import mpl_toolkits.mplot3d.axes3d as p3
-
-def plotRBFInformations(title, X, f, fK, history, axis):
+def plotRBFInformations(title, X, f, fK, fLearn, history, axis):
     fig = plt.figure(figsize=(8, 8))
     plt.subplot(2, 1, 1)
     plt.axis(axis)
     plt.title("RBF for " + title)
     plt.plot(X, f, 'green')
     plt.plot(X, fK, 'red')
+    plt.plot(X, fLearn, 'blue')
+    red_patch = mpatches.Patch(color='red', label='f')
+    green_patch = mpatches.Patch(color='green', label='fK')
+    blue_patch = mpatches.Patch(color='blue', label='t')
+    plt.legend(handles=[red_patch, green_patch, blue_patch])
     plt.axis([0, 2*np.pi, -1.5, 1.5])
 
     plt.subplot(2, 1, 2)
