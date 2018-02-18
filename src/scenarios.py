@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import RBF
+import SOM
 import graph
 import matplotlib
 import matplotlib.pyplot as plt
@@ -113,3 +114,24 @@ def scenario3_3():
     history = rbfSquare.fit(X=X, T=YSquare , sigma=np.sqrt(2*np.pi/NB_HIDDEN))
     YSquareRBF = rbfSquare.predict(XTest)
     graph.plotRBFInformations("Square function", XTest, YSquareTest, YSquareRBF, YSquare, history, [0, 2*np.pi, -1.5, 1.5])
+
+def scenario4_1():
+    # Read the animals data and create the 32x84 matrix
+    fileAnimals = open("../dataset/animals.dat", "r")
+    content = fileAnimals.read()
+    fileAnimals.close()
+    attributes = np.array(list(map(int, content.split(","))))
+    attributes = attributes.reshape((32,84))
+    # Read the animals names
+    fileAnimalsName = open("../dataset/animalnames.txt", "r")
+    content = fileAnimalsName.read()
+    fileAnimalsName.close()
+    names= [n.replace("\t","").replace("'","") for n in content.split("\n")]
+    # Create the SOM
+    som = SOM.SOM(lr=0.01, nb_eboch=20, nb_hidden=100, neighbourhood_size=50)
+    print("Learning ...")
+    som.fit(attributes)
+    print("Predict ...")
+    result = som.predict(attributes)
+    for i,winner in result:
+        print(names[i])

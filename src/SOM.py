@@ -15,22 +15,88 @@ class SOM():
     def distance(self, V1, V2):
         return np.linalg.norm(V1-V2)
 
+    def neighbourhoodByIndex(self, winner):
+        neighbourhood = [winner]
+
+        # Add the left neighbourhood
+        for i in range(int(self.neighbourhood_size)):
+            if (winner-i) < 0:
+                break
+            neighbourhood.append((winner-i))
+
+        # Add the right neighbourhood
+        for i in range(int(self.neighbourhood_size)):
+            if (i+winner) >= len(self.W):
+                break
+            neighbourhood.append(i+winner)
+
+        return neighbourhood
+
+    def neighbourhoodByDistance(self, winner):
+        neighbourhood = [winner]
+        for i, unit in enumerate(self.W):
+            if i != winner:
+                dist = self.distance(self.W[winner], unit)
+                if dist <= self.neighbourhood_size:
+                    neighbourhood.append(i)
+        return neighbourhood
+
+    def neighbourhoodBySize(self, winner):
+        neighbourhood = [(winner, 0)]
+        for i, unit in enumerate(self.W):
+            if i != winner:
+                dist = self.distance(self.W[winner], unit)
+                neighbourhood.append((i,dist))
+
+        neighbourhood.sort(key=lambda tup: tup[1])
+        neighbourhood = neighbourhood[:int(self.neighbourhood_size)]
+        return neighbourhood
+
     def fit(self, X):
-        self.W = np.random.normal(0, 1, (self.nb_hidden, X.shape[1]))
-        print(self.W.shape)
+        firts_neighbourhood_size = self.neighbourhood_size
+        self.W = np.random.uniform(0, 1, (self.nb_hidden, X.shape[1]))
+        print(self.W.shape) # 100,84
 
         for step in range(self.nb_eboch):
+            if step%(self.nb_eboch/10) == 0:
+                print("Epoch " + str(step) + " ...")
 
             # For each input we want to find the closest unit
             for Xk in X:
                 bestDistance = self.distance(Xk, self.W[0])
-                bestUnit = 0
+                winner = 0
 
                 for i, unit in enumerate(self.W[1:]):
                     dist = self.distance(Xk, unit)
                     if dist < bestDistance:
-                        bestDistance = distance
-                        bestUnit = i
+                        bestDistance = dist
+                        winner = i
 
-                # We can update the weigths of the closest unit and its neighbourhood
-                delta = 
+                #neighbourhood = self.neighbourhoodBySize(winner)
+                #neighbourhood = self.neighbourhoodByDistance(winner)
+                neighbourhood = self.neighbourhoodByIndex(winner)
+
+                # Update the weight of neighbourhood
+                for i in neighbourhood:
+                #for i,dist in neighbourhood:
+                    deltaW = self.lr * (Xk - self.W[i])
+                    self.W[i] += deltaW
+
+            # We update the neighbourhood_size to be close of 1
+            self.neighbourhood_size = self.neighbourhood_size - (firts_neighbourhood_size) / self.nb_eboch
+
+    def predict(self, X):
+        result = []
+        for index,Xk in enumerate(X):
+            bestDistance = self.distance(Xk, self.W[0])
+            winner = 0
+
+            for i, unit in enumerate(self.W[1:]):
+                dist = self.distance(Xk, unit)
+                if dist < bestDistance:
+                    bestDistance = dist
+                    winner = i
+            result.append((index,winner))
+
+        result.sort(key=lambda tup: tup[1])
+        return result

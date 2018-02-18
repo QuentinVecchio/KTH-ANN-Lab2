@@ -1,0 +1,109 @@
+## With neighbourhood by distance ##
+# beetle
+# butterfly
+# dragonfly
+# grasshopper
+# housefly
+# moskito
+# spider
+#
+# antelop
+# bat
+# camel
+# cat
+# dog
+# elephant
+# giraffe
+# horse
+# hyena
+# kangaroo
+# lion
+# pig
+# rabbit
+# rat
+# skunk
+# walrus
+# ape
+# bear
+#
+# crocodile
+# frog
+# seaturtle
+# penguin
+# duck
+# ostrich
+# pelican
+####################################
+
+## With neighbourhood by distance ##
+# camel
+# giraffe
+# pig
+# antelop
+# elephant
+# kangaroo
+# hyena
+# rabbit
+# rat
+# skunk
+# horse
+# bat
+# lion
+# ape
+# dog
+# bear
+# cat
+# walrus
+
+# crocodile
+# frog
+# seaturtle
+# penguin
+# beetle
+# butterfly
+# dragonfly
+# grasshopper
+# spider
+# duck
+# ostrich
+# pelican
+# housefly
+# moskito
+####################################
+
+## With neighbourhood by index ##
+# antelop
+# camel
+# giraffe
+# horse
+# kangaroo
+# pig
+# rabbit
+# lion
+# bat
+# cat
+# skunk
+# rat
+# dog
+# elephant
+# ape
+# bear
+# hyena
+# walrus
+
+# crocodile
+# seaturtle
+# frog
+# ostrich
+# duck
+# pelican
+# penguin
+
+# beetle
+# butterfly
+# dragonfly
+# grasshopper
+# housefly
+# moskito
+# spider
+####################################
