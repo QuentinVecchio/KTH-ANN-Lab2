@@ -32,3 +32,14 @@ def plotError(title, eHistory):
     plt.setp(lines, linewidth=2, color='r')
     plt.title(title)
     plt.show()
+
+def plotMap(title, coordinates):
+    x, y = coordinates.T
+    labels = ['{0}'.format(i) for i in range(len(coordinates))]
+    plt.subplots_adjust(bottom = 0.1)
+    plt.scatter(x,y,marker='o', s=300)
+    for label, x, y in zip(labels, coordinates[:, 0], coordinates[:, 1]):
+        plt.annotate(label, xy=(x, y), xytext=(-3, -3), textcoords='offset points')
+
+    plt.title(title)
+    plt.show()

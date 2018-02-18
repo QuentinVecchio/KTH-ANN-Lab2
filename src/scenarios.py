@@ -130,8 +130,34 @@ def scenario4_1():
     # Create the SOM
     som = SOM.SOM(lr=0.01, nb_eboch=20, nb_hidden=100, neighbourhood_size=50)
     print("Learning ...")
-    som.fit(attributes)
+    som.fit(attributes, method="index")
     print("Predict ...")
     result = som.predict(attributes)
+    result.sort(key=lambda tup: tup[1])
     for i,winner in result:
         print(names[i])
+
+def scenario4_2():
+    # Read the animals data and create the 32x84 matrix
+    filecities = open("../dataset/cities.dat", "r")
+    coordinates = []
+    content = filecities.readlines()
+    for line in content:
+        if line[0] != '%' and len(line) > 1: # avoid comments and empty line
+            line = line.split(';')[0]
+            coordinates.append(np.array(list(map(float, line.split(",")))))
+
+    filecities.close()
+    coordinates = np.array(coordinates)
+    coordinates = coordinates.reshape((10,2))
+    graph.plotMap("Cities", coordinates)
+    # Create the SOM
+    som = SOM.SOM(lr=0.01, nb_eboch=50, nb_hidden=10, neighbourhood_size=2)
+    print("Learning ...")
+    som.fit(coordinates, method="index-circular")
+    print("Predict ...")
+    result = som.predict(coordinates)
+    print(result)
+    #
+    # for i,winner in result:
+    #     print(names[i])

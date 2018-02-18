@@ -32,6 +32,22 @@ class SOM():
 
         return neighbourhood
 
+    def neighbourhoodByIndexCircular(self, winner):
+        neighbourhood = [winner]
+
+        # Add the left neighbourhood
+        for i in range(int(self.neighbourhood_size)):
+            index = winner-i
+            if index < 0:
+                i = len(self.W) - 1 -i
+            neighbourhood.append(index)
+
+        # Add the right neighbourhood
+        for i in range(int(self.neighbourhood_size)):
+            neighbourhood.append((i+winner)%len(self.W))
+
+        return neighbourhood
+
     def neighbourhoodByDistance(self, winner):
         neighbourhood = [winner]
         for i, unit in enumerate(self.W):
@@ -52,7 +68,7 @@ class SOM():
         neighbourhood = neighbourhood[:int(self.neighbourhood_size)]
         return neighbourhood
 
-    def fit(self, X):
+    def fit(self, X, method):
         firts_neighbourhood_size = self.neighbourhood_size
         self.W = np.random.uniform(0, 1, (self.nb_hidden, X.shape[1]))
         print(self.W.shape) # 100,84
@@ -72,13 +88,19 @@ class SOM():
                         bestDistance = dist
                         winner = i
 
-                #neighbourhood = self.neighbourhoodBySize(winner)
-                #neighbourhood = self.neighbourhoodByDistance(winner)
-                neighbourhood = self.neighbourhoodByIndex(winner)
+                neighbourhood = []
+                if method == "index":
+                    neighbourhood = self.neighbourhoodByIndex(winner)
+                if method == "index-circular":
+                    neighbourhood = self.neighbourhoodByIndexCircular(winner)
+                elif method == "distance":
+                    neighbourhood = self.neighbourhoodByDistance(winner)
+                elif method == "size":
+                    neighbourhood = self.neighbourhoodBySize(winner)
+                    neighbourhood = [i[0] for i in neighbourhood]
 
                 # Update the weight of neighbourhood
                 for i in neighbourhood:
-                #for i,dist in neighbourhood:
                     deltaW = self.lr * (Xk - self.W[i])
                     self.W[i] += deltaW
 
@@ -98,5 +120,4 @@ class SOM():
                     winner = i
             result.append((index,winner))
 
-        result.sort(key=lambda tup: tup[1])
         return result
