@@ -76,7 +76,7 @@ def scenario3_2():
     YSquare = YSquare.reshape((len(YSquare),1))
     YSquareTest = square(2*XTest)
     YSquareTest = YSquareTest.reshape((len(YSquareTest),1))
-    rbfSquare = RBF.simpleRBF(lr=0.01, nb_eboch=10000, nb_hidden=NB_HIDDEN, batch_size=1, neighbourhood_size=50)
+    rbfSquare = RBF.simpleRBF(lr=0.01, nb_eboch=10000, nb_hidden=NB_HIDDEN, batch_size=1)
     #history = rbfSquare.fit(X=X, T=YSquare, mu=[0, 2*np.pi, np.pi-0.01, np.pi+0.01, np.pi-0.05, np.pi+0.05] , sigma=np.sqrt(1))
     history = rbfSquare.fit(X=X, T=YSquare, mu=np.linspace(0, 2*np.pi, num=NB_HIDDEN) , sigma=np.sqrt(2*np.pi/NB_HIDDEN))
     YSquareRBF = rbfSquare.predict(XTest)
@@ -161,3 +161,34 @@ def scenario4_2():
     #
     # for i,winner in result:
     #     print(names[i])
+
+def scenario4_3():
+    fileName = open("../dataset/mpnames.txt", "r", encoding='iso-8859-1')
+    MPnames = []
+    content = fileName.readlines()
+    for line in content:
+        MPnames.append(line.replace('\n', ''))
+
+    fileSex = open("../dataset/mpsex.dat", "r")
+    MPsex=[]
+    content = fileSex.readlines()
+    for line in content:
+        line = line.strip()
+        if len(line) >= 1 and line[0] != '%': # avoid comments and empty line
+            MPsex.append(line)
+
+    fileParty = open("../dataset/mpparty.dat", "r")
+    MPparty=[]
+    content = fileParty.readlines()
+    for line in content:
+        line = line.strip()
+        if len(line) >= 1 and line[0] != '%': # avoid comments and empty line
+            MPparty.append(line)
+
+    fileDistrict = open("../dataset/mpdistrict.dat", "r")
+    MPdistrict=[]
+    content = fileDistrict.readlines()
+    for line in content:
+        line = line.strip()
+        if len(line) >= 1 and line[0] != '%': # avoid comments and empty line
+            MPdistrict.append(line)
