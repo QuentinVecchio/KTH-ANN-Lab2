@@ -107,3 +107,40 @@
 # moskito
 # spider
 ####################################
+
+## With neighbourhood by index ##
+beetle
+butterfly
+dragonfly
+grasshopper
+housefly
+moskito
+spider
+
+duck
+pelican
+ostrich
+penguin
+crocodile
+frog
+seaturtle
+
+ape
+walrus
+bat
+rabbit
+rat
+hyena
+skunk
+dog
+kangaroo
+cat
+lion
+bear
+horse
+antelop
+elephant
+giraffe
+camel
+pig
+####################################
