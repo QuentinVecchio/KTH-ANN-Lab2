@@ -54,11 +54,20 @@ class SOM():
     def neighbourhoodByManhattan(self, winner):
         neighbourhood = []
 
+        mat = np.ones((self.W.shape[0], self.W.shape[1]))
+
         # TODO : improve this code
         for x in range(self.W.shape[0]):
             for y in range(self.W.shape[1]):
-                if self.distanceManhattan(winner, self.W[x][y]) <= self.neighbourhood_size:
-                    neighbourhood.append([x,y])
+                mat[x][y] = self.distanceManhattan(self.W[winner[0], winner[1]], self.W[x][y])
+
+        m = np.max(mat)
+
+        for i in range(self.neighbourhood_size*2+1):
+            t =  np.argmin(mat, axis=1)
+            neighbourhood.append(t)
+            mat[t[0]][t[1]] = m
+
 
         return neighbourhood
 
@@ -97,7 +106,7 @@ class SOM():
 
     def fit(self, X, method):
         firts_neighbourhood_size = self.neighbourhood_size
-        self.W = np.random.uniform(0, 1, (self.output[0], self.output[1], X.shape[1]))
+        self.W = np.random.uniform(0.1, 0.9, (self.output[0], self.output[1], X.shape[1]))
         print(self.W.shape) # 10,15,31
 
         for step in range(self.nb_eboch):
@@ -129,12 +138,12 @@ class SOM():
                     self.W[x][y] += deltaW
 
             # We update the neighbourhood_size to be close of 1
-            self.neighbourhood_size = self.neighbourhood_size - (firts_neighbourhood_size) / self.nb_eboch
+            #self.neighbourhood_size = self.neighbourhood_size - (firts_neighbourhood_size) / self.nb_eboch
 
     def predict(self, X):
         result = []
         for index,Xk in enumerate(X):
             winner = self.predictWinnerForInput(Xk)
-            result.append((index,winner))
+            result.append(winner)
 
         return result

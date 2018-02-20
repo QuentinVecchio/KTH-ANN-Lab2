@@ -26,7 +26,7 @@ def plotRBFInformations(title, X, f, fK, fLearn, history, axis):
     plt.setp(lines, linewidth=2, color='r')
     plt.title("Learning Curve  " + title)
     plt.show()
-    
+
 def plotRBFInformationsHistory(title, history, history2, history3, history4,axis):
     fig = plt.figure(figsize=(8, 8))
     plt.subplot(1, 1, 1)
@@ -85,5 +85,16 @@ def plotMap(title, coordinates):
     for label, x, y in zip(labels, coordinates[:, 0], coordinates[:, 1]):
         plt.annotate(label, xy=(x, y), xytext=(-3, -3), textcoords='offset points')
 
+    plt.title(title)
+    plt.show()
+
+def plotMapWithColors(title, coordinates, colors):
+    x, y = coordinates.T
+    x = x + np.random.normal(0, 0.25, len(x))
+    y = y + np.random.normal(0, 0.25, len(y))
+
+    labels = ['{0}'.format(i) for i in range(len(coordinates))]
+    plt.subplots_adjust(bottom = 0.1)
+    plt.scatter(x,y,marker='.', s=100, c = colors)
     plt.title(title)
     plt.show()

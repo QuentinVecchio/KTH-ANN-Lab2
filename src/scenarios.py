@@ -6,6 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import SOM
 from sklearn.neural_network import MLPRegressor
 
 def generateDataSet(N, V):
@@ -295,6 +296,7 @@ def scenario4_3():
     content = fileName.readlines()
     for line in content:
         MPnames.append(line.replace('\n', ''))
+    fileName.close()
 
     fileSex = open("../dataset/mpsex.dat", "r")
     MPsex=[]
@@ -303,6 +305,7 @@ def scenario4_3():
         line = line.strip()
         if len(line) >= 1 and line[0] != '%': # avoid comments and empty line
             MPsex.append(line)
+    fileSex.close()
 
     fileParty = open("../dataset/mpparty.dat", "r")
     MPparty=[]
@@ -311,6 +314,7 @@ def scenario4_3():
         line = line.strip()
         if len(line) >= 1 and line[0] != '%': # avoid comments and empty line
             MPparty.append(line)
+    fileParty.close()
 
     fileDistrict = open("../dataset/mpdistrict.dat", "r")
     MPdistrict=[]
@@ -319,3 +323,38 @@ def scenario4_3():
         line = line.strip()
         if len(line) >= 1 and line[0] != '%': # avoid comments and empty line
             MPdistrict.append(line)
+    fileDistrict.close()
+
+    fileVotes = open("../dataset/votes.dat", "r")
+    content = fileVotes.read()
+    fileVotes.close()
+    MPvotes = np.array(list(map(float, content.split(","))))
+    MPvotes = MPvotes.reshape((349,31))
+
+    som = SOM.SOM(lr=0.1, nb_eboch=200, output=[10, 10], neighbourhood_size=2)
+    print("Learning ...")
+    som.fit(MPvotes, method="manhattan")
+    print("Predict ...")
+    result = som.predict(MPvotes)
+    print(result)
+    print(len(result))
+
+    c = ['b', 'g', 'r', 'tab:brown', 'tab:pink', 'c', 'tab:blue', 'tab:orange']
+    colors = []
+    for i in MPparty:
+        colors.append(c[int(i)])
+
+    graph.plotMapWithColors("MP by party", np.asarray(result), colors)
+
+
+    colors = []
+    for i in MPsex:
+        colors.append(c[int(i)])
+
+    graph.plotMapWithColors("MP by sex", np.asarray(result), colors)
+
+    colors = []
+    for i in MPdistrict:
+        colors.append((0, int(i) / 30.0, 0, 1))
+
+    graph.plotMapWithColors("MP by district", np.asarray(result), colors)
