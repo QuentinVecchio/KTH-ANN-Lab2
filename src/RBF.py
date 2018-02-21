@@ -19,7 +19,7 @@ class simpleRBF():
         self.verbose = verbose
     def initialisationMu(self,X, nb_ite=200):
         self.mu = np.reshape(np.random.rand( 1,self.nb_hidden)*2*np.pi,(1,self.nb_hidden))
-        self.mu = np.reshape([[100, 100],[100, 4]],(2,2))
+        #self.mu = np.reshape([[100, 100],[100, 4]],(2,2))
         p = np.random.randint(len(X),size=nb_ite)
         frequency = np.zeros(self.nb_hidden)
         count = 1.0

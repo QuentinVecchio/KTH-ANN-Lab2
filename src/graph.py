@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.patches as mpatches
 import matplotlib.animation as animation
-
+from matplotlib.colors import LogNorm
 def plotRBFInformationsHistory(title, history, history2, history3, history4,axis):
     fig = plt.figure(figsize=(8, 8))
     plt.subplot(1, 1, 1)
@@ -23,6 +23,30 @@ def plotRBFInformationsHistory(title, history, history2, history3, history4,axis
     black_patch = mpatches.Patch(color='black', label="Sinus Approximation with noise and initialisation ")
     #yellow_patch = mpatches.Patch(color='yellow', label=str(lr5))
     plt.legend(handles=[red_patch, green_patch, blue_patch, black_patch])#, yellow_patch])
+
+    plt.setp(lines, linewidth=2, color='r')
+    plt.title("Learning Curve :  " + title)
+    plt.show()
+
+def plotRBFInformationsHistory3_2eta(title, history, history2, history3, history4, history5, history6,axis):
+    fig = plt.figure(figsize=(8, 8))
+    plt.subplot(1, 1, 1)
+    plt.ylim([0, max(history)*1.1])
+    plt.xlim([-len(history) * 0.1, len(history) + len(history) * 0.1])
+
+    lines, = plt.plot(range(len(history)), history,'red')
+    plt.plot(range(len(history)), history2,'green')
+    plt.plot(range(len(history)), history3,'blue')
+    plt.plot(range(len(history)), history4,'black')
+    plt.plot(range(len(history)), history5,'yellow')
+    plt.plot(range(len(history)), history6,'purple')
+    green_patch = mpatches.Patch(color='red', label="0.2")
+    red_patch = mpatches.Patch(color='green', label="0.1")
+    blue_patch = mpatches.Patch(color='blue', label="0.5")
+    black_patch = mpatches.Patch(color='black', label="0.1 ")
+    yellow_patch = mpatches.Patch(color='yellow', label="0.01")
+    purple_patch = mpatches.Patch(color='purple', label="0.001")
+    plt.legend(handles=[red_patch, green_patch, blue_patch, black_patch, yellow_patch, purple_patch])
 
     plt.setp(lines, linewidth=2, color='r')
     plt.title("Learning Curve :  " + title)
@@ -209,4 +233,101 @@ def plotMapWithColors(title, coordinates, colors):
     plt.subplots_adjust(bottom = 0.1)
     plt.scatter(x,y,marker='.', s=100, c = colors)
     plt.title(title)
+    plt.show()
+
+
+def plotRBFInformationsHistory3_3(title, history, history2, history3, history4,axis):
+    fig = plt.figure(figsize=(8, 8))
+    plt.subplot(1, 1, 1)
+    plt.ylim([0, max(history)*1.1])
+    plt.xlim([-len(history) * 0.1, len(history) + len(history) * 0.1])
+
+    lines, = plt.plot(range(len(history)), history,'red')
+    plt.plot(range(len(history)), history2,'green')
+    plt.plot(range(len(history)), history3,'blue')
+    plt.plot(range(len(history)), history4,'black')
+    #plt.plot(range(len(history)), history5,'yellow')
+
+    green_patch = mpatches.Patch(color='red', label="Sinus Approximation")
+    red_patch = mpatches.Patch(color='green', label="Sinus Approximation with initialisation")
+    blue_patch = mpatches.Patch(color='blue', label="Sinus Approximation with noise")
+    black_patch = mpatches.Patch(color='black', label="Sinus Approximation with noise and initialisation ")
+    #yellow_patch = mpatches.Patch(color='yellow', label=str(lr5))
+    plt.legend(handles=[red_patch, green_patch, blue_patch, black_patch])#, yellow_patch])
+
+    plt.setp(lines, linewidth=2, color='r')
+    plt.title("Learning Curve :  " + title)
+    plt.show()
+
+def plotRBFInformations3_2eta(title, X, f, approx, approx2, approx3, approx4, approx5, approx6, axis):
+    fig = plt.figure(figsize=(8, 8))
+    plt.subplot(1, 1, 1)
+
+    plt.axis(axis)
+    plt.title("RBF for " + title)
+    plt.plot(X, f, 'green')
+    plt.plot(X, approx, 'red')
+    plt.plot(X, approx2, 'orange')
+    plt.plot(X, approx3, 'blue')
+    plt.plot(X, approx4, 'black')
+    plt.plot(X, approx5, 'yellow')
+    plt.plot(X, approx6, 'purple')
+    
+    green_patch = mpatches.Patch(color='green', label='Test')
+    red_patch = mpatches.Patch(color='red', label="0.5")
+    orange_patch = mpatches.Patch(color='orange', label="0.2")
+    blue_patch = mpatches.Patch(color='blue', label="0.1")
+    black_patch = mpatches.Patch(color='black', label="0.05")
+    yellow_patch = mpatches.Patch(color='yellow', label="0.01")
+    purple_patch = mpatches.Patch(color='purple', label="0.001")
+    
+    plt.legend(handles=[green_patch, red_patch, orange_patch,blue_patch, black_patch, yellow_patch, purple_patch])#, blue_patch])
+    plt.axis([0, 2*np.pi, -1.5, 1.5])
+    plt.show()
+   
+
+
+def plotRBFInformations3_2(title,X, test, approx, true, history, axis):
+    fig = plt.figure(figsize=(8, 8))
+    plt.subplot(2, 1, 1)
+
+    plt.axis(axis)
+    plt.title("RBF for " + title)
+    plt.plot(X, test, 'green')
+    plt.plot(X, approx, 'red')
+    plt.plot(X, true, 'orange')
+    green_patch = mpatches.Patch(color='green', label='Test')
+    red_patch = mpatches.Patch(color='red', label="Approximation")
+    orange_patch = mpatches.Patch(color='orange', label="True")
+    plt.legend(handles=[green_patch, red_patch, orange_patch])
+    plt.axis([0, 2*np.pi, -1.5, 1.5])
+    plt.subplot(2, 1, 2)
+    plt.ylim([-0.1, max(history)*1.1])
+    plt.xlim([-len(history) * 0.1, len(history) + len(history) * 0.1])
+    lines, = plt.plot(range(len(history)), history)
+    plt.setp(lines, linewidth=2, color='r')
+    plt.title("Learning Curve  " + title)
+    plt.show()
+def plotRBFInformations3_1(title,X, test, approx, true, posneg, history, axis):
+    fig = plt.figure(figsize=(8, 8))
+    plt.subplot(2, 1, 1)
+
+    plt.axis(axis)
+    plt.title("RBF for " + title)
+    plt.plot(X, test, 'green')
+    plt.plot(X, approx, 'red')
+    plt.plot(X, true, 'orange')
+    plt.plot(X, posneg, 'black')
+    green_patch = mpatches.Patch(color='green', label='Test')
+    red_patch = mpatches.Patch(color='red', label="Approximation")
+    orange_patch = mpatches.Patch(color='orange', label="True")
+    black_patch = mpatches.Patch(color='black', label="Transform")
+    plt.legend(handles=[green_patch, red_patch, orange_patch, black_patch])
+    plt.axis([0, 2*np.pi, -1.5, 1.5])
+    plt.subplot(2, 1, 2)
+    plt.ylim([-0.1, max(history)*1.1])
+    plt.xlim([-len(history) * 0.1, len(history) + len(history) * 0.1])
+    lines, = plt.plot(range(len(history)), history)
+    plt.setp(lines, linewidth=2, color='r')
+    plt.title("Learning Curve  " + title)
     plt.show()

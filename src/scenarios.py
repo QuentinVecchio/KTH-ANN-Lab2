@@ -45,10 +45,10 @@ def scenario3_1():
     YSinusTest = np.sin(2*XTest)
     YSinusTest = YSinusTest.reshape((len(YSinusTest),1))
     rbfSinus = RBF.simpleRBF(lr=0.2, nb_eboch=1000, nb_hidden=NB_HIDDEN, batch_size=1)
-    #history = rbfSinus.fit(X=X, T=YSinus, mu=np.linspace(0, 2*np.pi, num=NB_HIDDEN) , sigma=np.sqrt(2*np.pi/NB_HIDDEN))#np.sqrt(2*np.pi/NB_HIDDEN)
-    #YSinusRBF = rbfSinus.predict(XTest)
-    #print("Test error = "  + str(abs(np.sum((YSinusRBF - YSinusTest)))))
-    #graph.plotRBFInformations("Sinus function", XTest, YSinusTest, YSinusRBF, YSinus, history, [0, 2*np.pi, -1.5, 1.5])
+    history = rbfSinus.fit(X=X, T=YSinus, mu=np.linspace(0, 2*np.pi, num=NB_HIDDEN) , sigma=np.sqrt(2*np.pi/NB_HIDDEN))#np.sqrt(2*np.pi/NB_HIDDEN)
+    YSinusRBF = rbfSinus.predict(XTest)
+    print("Test error = "  + str(abs(np.sum((YSinusRBF - YSinusTest)))))
+    graph.plotRBFInformations3_2("Sinus function", XTest, YSinusTest, YSinusRBF, YSinus, history, [0, 2*np.pi, -1.5, 1.5])
 
     ##### Square Function #####
 
@@ -65,7 +65,7 @@ def scenario3_1():
     history = rbfSquare.fit(X=X, T=YSquare, mu=np.linspace(0, 2*np.pi, num=NB_HIDDEN) , sigma=np.sqrt(2*np.pi/NB_HIDDEN))
     YSquareRBF = rbfSquare.predict(XTest)
     print("Test error = "  + str(abs(np.sum((posneg(YSquareRBF) - YSquareTest)))))
-    graph.plotRBFInformations("Square function", XTest, YSquareTest, YSquareRBF, YSquare, posneg(YSquareRBF), history, [0, 2*np.pi, -1.5, 1.5])
+    graph.plotRBFInformations3_1("Square function", XTest, YSquareTest, YSquareRBF, YSquare, posneg(YSquareRBF), history, [0, 2*np.pi, -1.5, 1.5])
 
 def scenario3_2():
     N = math.ceil(2 * math.pi / 0.1)
@@ -88,9 +88,9 @@ def scenario3_2():
     history2 = rbfSinus.fit(X=X, T=YSinus, mu=np.random.rand( 1,NB_HIDDEN)*2*np.pi , sigma=np.sqrt(2*np.pi/NB_HIDDEN))
     #graph.plotRBFInformationsHistory("Error for different initialisation of Mu", history, history2, "uniform", "random", [0, 2*np.pi, -1.5, 1.5])
 
-    #YSinusRBF = rbfSinus.predict(XTest)
-    #print("Test error = "  + str(abs(np.sum((YSinusRBF - YSinusTest)))))
-    #graph.plotRBFInformations("Sinus function with noise", XTest, YSinusTest, YSinusRBF, YSinus, history, [0, 2*np.pi, -1.5, 1.5])
+    YSinusRBF = rbfSinus.predict(XTest)
+    print("Test error = "  + str(abs(np.sum((YSinusRBF - YSinusTest)))))
+    graph.plotRBFInformations3_2("Sinus function with noise", XTest, YSinusTest, YSinusRBF, YSinus, history, [0, 2*np.pi, -1.5, 1.5])
 
     ##### Square Function #####
     YSquare = square(2*X)
@@ -102,32 +102,10 @@ def scenario3_2():
     YSquareTest = YSquareTest.reshape((len(YSquareTest),1))
     rbfSquare = RBF.simpleRBF(lr=0.01, nb_eboch=500, nb_hidden=NB_HIDDEN, batch_size=1)
     #history = rbfSquare.fit(X=X, T=YSquare, mu=[0, 2*np.pi, np.pi-0.01, np.pi+0.01, np.pi-0.05, np.pi+0.05] , sigma=np.sqrt(1))
-    #history = rbfSquare.fit(X=X, T=YSquare, mu=np.linspace(0, 2*np.pi, num=NB_HIDDEN) , sigma=np.sqrt(2*np.pi/NB_HIDDEN))
-    #YSquareRBF = rbfSquare.predict(XTest)
-    #graph.plotRBFInformations("Square function with noise", XTest, YSquareTest, YSquareRBF, YSquare, history, [0, 2*np.pi, -1.5, 1.5])
-def scenario3_2_1():
+    history = rbfSquare.fit(X=X, T=YSquare, mu=np.linspace(0, 2*np.pi, num=NB_HIDDEN) , sigma=np.sqrt(2*np.pi/NB_HIDDEN))
+    YSquareRBF = rbfSquare.predict(XTest)
+    graph.plotRBFInformations3_2("Square function with noise", XTest, YSquareTest, YSquareRBF, YSquare, history, [0, 2*np.pi, -1.5, 1.5])
 
-    N = math.ceil(2 * math.pi / 0.1)
-    X = np.linspace(0, 2*np.pi, num=N)
-    XTest = np.linspace(0.05, 2*np.pi+0.05, num = N)
-    NB_HIDDEN= 12 #6, 11 , 26
-    ##### Sinus Function #####
-
-    YSinus = np.sin(2*X)
-    #error = np.random.normal(0, 0.01, len(YSinus))
-    #YSinus += error
-    YSinusTest = np.sin(2*XTest)
-
-
-
-    nn =  MLPRegressor()
-    nn.fit(np.reshape(X,(1,N)), np.reshape(YSinusTest,(1,N)))
-    prediction1= nn.predict(np.reshape(XTest,(1,N)))
-
-    rbfSinus = RBF.simpleRBF(lr=0.2, nb_eboch=150, nb_hidden=NB_HIDDEN, batch_size=1, verbose=False)
-    history = rbfSinus.fit(X=X, T=YSinus, mu=np.linspace(0, 2*np.pi, num=NB_HIDDEN) , sigma=np.sqrt(2*np.pi/NB_HIDDEN))
-    prediction2 = rbfSinus.predict(XTest)
-    graph.plot3_2_1("",XTest, prediction1.T,prediction2,YSinusTest,[0, 2*np.pi, -1.5, 1.5])
 
 
 def scenario3_2_eta():
@@ -162,7 +140,7 @@ def scenario3_2_eta():
     history3 = rbfSinus.fit(X=X, T=YSinus , sigma=1)#np.sqrt(2*np.pi/NB_HIDDEN)
     approx3 = rbfSinus.predict(XTest)
 
-    bfSinus = RBF.simpleRBF(lr=0.05, nb_eboch=50, nb_hidden=NB_HIDDEN, batch_size=1)
+    bfSinus = RBF.simpleRBF(lr=0.01, nb_eboch=50, nb_hidden=NB_HIDDEN, batch_size=1)
     history4 = rbfSinus.fit(X=X, T=YSinus , sigma=1)#np.sqrt(2*np.pi/NB_HIDDEN)
     approx4 = rbfSinus.predict(XTest)
 
@@ -174,8 +152,8 @@ def scenario3_2_eta():
     history6 = rbfSinus.fit(X=X, T=YSinus , sigma=1)#np.sqrt(2*np.pi/NB_HIDDEN)
     approx6 = rbfSinus.predict(XTest)
 
-    graph.plotRBFInformations("Square function with noise", XTest, YSinusTest,approx,approx2,approx3,approx4,approx5,approx6,[0, 2*np.pi, -1.5, 1.5])
-    graph.plotRBFInformationsHistory("Comparaison of learning rate", history, history2, history3,history4, history5 , history6, [0, 2*np.pi, -1.5, 1.5])
+    #graph.plotRBFInformations3_2eta("Square function with noise", XTest, YSinusTest,approx,approx2,approx3,approx4,approx5,approx6,[0, 2*np.pi, -1.5, 1.5])
+    #graph.plotRBFInformationsHistory3_2eta("Comparaison of learning rate", history, history2, history3,history4, history5 , history6, [0, 2*np.pi, -1.5, 1.5])
 
 def scenario3_3():
     N = math.ceil(2 * math.pi / 0.1)
@@ -204,7 +182,6 @@ def scenario3_3():
     bfSinus = RBF.simpleRBF(lr=0.2, nb_eboch=500, nb_hidden=NB_HIDDEN, batch_size=1)
     rbfSinus.initialisationMu(X)
     history2 = rbfSinus.fit(X=X, T=YSinus , sigma=1)#np.sqrt(2*np.pi/NB_HIDDEN)
-    print(history2)
     # With Noise
     YSinus = np.sin(2*X)
     error = np.reshape(np.random.normal(0, 0.1, len(YSinus)), ( N,1))
@@ -221,10 +198,10 @@ def scenario3_3():
     history4 = rbfSinus.fit(X=X, T=YSinus , sigma=1)#np.sqrt(2*np.pi/NB_HIDDEN)
     #print(history4)
 
-    graph.plotRBFInformationsHistory("Comparaison", history, history2, history3,history4, [0, 2*np.pi, -1.5, 1.5])
+    graph.plotRBFInformationsHistory3_3("Comparaison", history, history2, history3,history4, [0, 2*np.pi, -1.5, 1.5])
     ##### Square Function #####
 def ouverture1():
-    fileTrain = open('ballist.dat', 'r')
+    fileTrain = open('../dataset/ballist.dat', 'r')
     X_train = []
     Y_train = []
     for line in fileTrain:
@@ -242,7 +219,7 @@ def ouverture1():
     return np.reshape(X_train,(len(X_train),len(X_train[0]))), np.reshape(Y_train,(len(Y_train),len(Y_train[0])))
 
 def ouverture2():
-    fileTrain = open('balltest.dat', 'r')
+    fileTrain = open('../dataset/balltest.dat', 'r')
     X_train = []
     Y_train = []
     for line in fileTrain:
@@ -259,14 +236,6 @@ def ouverture2():
         Y_train.append(yToAdd)
     return np.reshape(X_train,(len(X_train),len(X_train[0]))), np.reshape(Y_train,(len(Y_train),len(Y_train[0])))
 
-def scenario3_3_ballistic():
-    NB_HIDDEN=10
-    X, Y = ouverture1()
-    RBFball = RBF.simpleRBFBall(lr=0.001, nb_eboch=1000, nb_hidden=NB_HIDDEN, batch_size=1)
-    RBFball.initialisationMu(X)
-    history = RBFball.fit(X=X, T=Y , sigma=np.sqrt(2*np.pi/NB_HIDDEN))#np.sqrt(2*np.pi/NB_HIDDEN)
-    Xtest, Ytest = ouverture2()
-    print(RBFball.error(Xtest,Ytest))
 def generateDataSet():
     N = 50
     V = 3
@@ -283,7 +252,7 @@ def sceneario3_3CL():
     muHistory = RBFball.initialisationMu(X.T)
     graph.plotMuAnim("Mu history", X, Y, muHistory)
 
-def sceneario3_3_ballistic2():
+def sceneario3_3_ballistic():
     NB_HIDDEN=12
     X, Y = ouverture1()
 
@@ -291,16 +260,17 @@ def sceneario3_3_ballistic2():
     RBFball = RBF2.simpleRBFBall2D(lr=0.001, nb_eboch=10000, nb_hidden=NB_HIDDEN, batch_size=20)
     mu = RBFball.initialisationMu(X).T
     RBFball.fit(X,Y)
-
-    #mu = RBFball.initialisationMu(X).T
-    #history = RBFball.fit(X=X, T=Y , sigma=np.sqrt(2*np.pi/NB_HIDDEN))#np.sqrt(2*np.pi/NB_HIDDEN)
     Xtest, Ytest = ouverture2()
     Ypredict = RBFball.predict(Xtest)
     print(len(Xtest))
     print(RBFball.error(Xtest, Ytest))
-    #print(mu)
-    #graph.plotBallistic(X, mu)
 
+def sceneario3_3_showBallistic():
+    NB_HIDDEN=5
+    X, Y = ouverture1()
+    RBFball = RBF2.simpleRBFBall2D(lr=0.001, nb_eboch=10000, nb_hidden=NB_HIDDEN, batch_size=20)
+    mu = RBFball.initialisationMu(X).T
+    graph.plotBallistic(X, mu)
 def scenario4_1():
     # Read the animals data and create the 32x84 matrix
     fileAnimals = open("../dataset/animals.dat", "r")
